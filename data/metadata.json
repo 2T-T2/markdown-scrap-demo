@@ -1,0 +1,256 @@
+{
+  "git": {
+    "content": "",
+    "froms": [
+      "Gitコミット(commit)取り消し(修正)",
+      "Gitステージングから削除",
+      "Gitファイル追加",
+      "Git作業フロー",
+      "Git初期設定",
+      "Git追加(add)取り消し",
+      "コミット(Git)",
+      "ステージング(Git)",
+      "ハンク(Git)"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "コミット(Git)": {
+    "content": "# コミット(Git)\n\n[git] の 主要な操作の 1つ\n\n[ステージング(Git)]に登録された変更内容を「1回分の作業履歴（スナップショット）」として[ローカルリポジトリ(Git)]に記録する操作。\n[リモートリポジトリ(Git)]に記録する操作はまた別なので注意。\n\n## コマンド\n### 基本形\n``` bash\ngit commit -m <message>\n```\n### `git add` を省略していきなりコミット\n``` bash\ngit commit -a -m <message>\n```\n### 実際にはコミットせずに動作を確認([ドライラン])\n``` bash\ngit commit --dry-run  -m <message>\n```\n",
+    "froms": [
+      "Gitコミット(commit)取り消し(修正)",
+      "Gitステージングから削除",
+      "Gitファイル追加",
+      "Git作業フロー",
+      "ステージング(Git)",
+      "ハンク(Git)"
+    ],
+    "links": [
+      "git",
+      "ステージング(Git)",
+      "ローカルリポジトリ(Git)",
+      "リモートリポジトリ(Git)",
+      "ドライラン"
+    ],
+    "updated": 1778912132476,
+    "created": 1778912132476
+  },
+  "Gitプッシュ(push)取り消し(内容)": {
+    "content": "",
+    "froms": [
+      "Gitコミット(commit)取り消し(修正)"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "reflog(Git)": {
+    "content": "",
+    "froms": [
+      "Gitコミット(commit)取り消し(修正)"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "Gitコミット(commit)取り消し(修正)": {
+    "content": "# Gitコミット(commit)取り消し(修正)\n\n[git] で [コミット(Git)] した内容を修正したいときの方法。\n- `--amend` オプションを使用する。\n[Gitプッシュ(push)取り消し(内容)]とは別なので注意。\n\n\n## コミットメッセージの修正\n``` bash\ngit commit --amend -m <修正後のメッセージ>\n```\n## ファイルの追加忘れ\n``` bash\ngit add <忘れてたファイル>\ngit commit --amend --no-edit\n```\n## 著者情報の修正(社用アカウントで個人アカウントのコミットをしてしまった)\n``` bash\ngit commit --amend --author=\"<名前> <メール>\" --no-edit\n```\n## 不要ファイルの削除(機密ファイルを誤ってコミット)\n``` bash\ngit rm --cached <機密のファイル>\ngit commit --amend --no-edit\n```\n\n### `git commit --amend` を取り消したい[reflog(Git)]から復元する\n``` bash\ngit reflog\ngit reset --hard HEAD@{1}\n```\n### `git commit --amend` の内容がプッシュできない(強制プッシュ（個人ブランチのみ）)\n``` bash\ngit push --force-with-lease origin ブランチ名\n```\n",
+    "links": [
+      "git",
+      "コミット(Git)",
+      "Gitプッシュ(push)取り消し(内容)",
+      "reflog(Git)"
+    ],
+    "froms": [],
+    "updated": 1778912132165,
+    "created": 1778912132165
+  },
+  "Gitステージングに登録": {
+    "content": "",
+    "froms": [
+      "Gitステージングから削除"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "Gitステージングから削除": {
+    "content": "# Gitステージングから削除\n\n[git] で [Gitステージングに登録]で追加されたファイルを削除する方法。\n[コミット(Git)]に\n\n## ステージングから削除するコマンド\n### ファイル名を指定して削除\n``` bash\ngit reset <filename>\n```\n``` bash\ngit reset *.html\n```\n### ハンク(hunk)単位でステージングから削除\n``` bash\ngit reset -p\n```\n",
+    "links": [
+      "git",
+      "Gitステージングに登録",
+      "コミット(Git)"
+    ],
+    "froms": [
+      "Git追加(add)取り消し"
+    ],
+    "updated": 1778912132214,
+    "created": 1778912132214
+  },
+  "ステージング(Git)": {
+    "content": "# ステージング(Git)\n\n[git] で 追加/更新/削除 を行ったファイルの内、[コミット(Git)]したい内容を登録する場所。\nファイル単位の他に[ハンク(Git)]という単位で ステージング に登録することも出来ます。\n\n## ユースケース\n1. 作業A と 作業B を同時進行で行う。\n1. 作業B が完了したので、コミットしたい。\n1. 作業A は完了してないので、コミットしたくない。\n1. 作業A で編集したファイルだけ、にステージングに追加する。\n1. コミットすると、作業A で編集したファイルだけ[リポジトリ(Git)]に登録されて、履歴に残る。\n\n## ステージングに追加するコマンド\n### ファイル名を指定して追加\n``` bash\ngit add <filename>\n```\n``` bash\ngit add *.html\n```\n↑ ワイルドカードも指定できます\n### 「変更/追加/削除」したファイル全てを追加\n``` bash\ngit add -A\n```\n### 「変更/削除」したファイル全てを追加\n``` bash\ngit add -u\n```\n### 変更されたファイルをインタラクティブに追加\n``` bash\ngit add -i\n```\n### 実際には追加せずに、追加するファイル名を一覧表示する\n``` bash\ngit add -n\n```\n### `.gitignore` で設定したファイルも強制的(force)に追加\n``` bash\ngit add -f\n```\n### ハンク(hunk)単位でステージングに追加\n``` bash\ngit add -p\n```\n",
+    "froms": [
+      "Gitファイル追加",
+      "Git作業フロー",
+      "Git追加(add)取り消し",
+      "コミット(Git)",
+      "ハンク(Git)"
+    ],
+    "links": [
+      "git",
+      "コミット(Git)",
+      "ハンク(Git)",
+      "リポジトリ(Git)"
+    ],
+    "updated": 1778912132518,
+    "created": 1778912132518
+  },
+  "リポジトリ(Git)": {
+    "content": "",
+    "froms": [
+      "Gitファイル追加",
+      "ステージング(Git)"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "Gitファイル追加": {
+    "content": "# Gitファイル追加\n\n[git] でファイルを追加するときの方法\n\n1. [ステージング(Git)] にファイルを追加\n1. [ステージング(Git)] の内容を [コミット(Git)] で [リポジトリ(Git)] に登録し、履歴を残す\n",
+    "links": [
+      "git",
+      "ステージング(Git)",
+      "コミット(Git)",
+      "リポジトリ(Git)"
+    ],
+    "froms": [],
+    "updated": 1778912132257,
+    "created": 1778912132257
+  },
+  "Git初期設定": {
+    "content": "# Git初期設定\n\n[git] を使う際の初期設定まとめ\n\n## ユーザー名/メアドの登録\n``` bash\ngit config --global user.name <username>\ngit config --global user.email <your_emailaddress>\n```\n## デフォルトのブランチ名\n``` bash\ngit config --global init.defaultbranch <defaultbranch>\n```\n",
+    "froms": [
+      "Git作業フロー"
+    ],
+    "links": [
+      "git"
+    ],
+    "updated": 1778912132344,
+    "created": 1778912132344
+  },
+  "クローン(Git)": {
+    "content": "",
+    "froms": [
+      "Git作業フロー"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "ローカルリポジトリの初期化(Git)": {
+    "content": "",
+    "froms": [
+      "Git作業フロー"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "リモートリポジトリ(Git)": {
+    "content": "",
+    "froms": [
+      "Git作業フロー",
+      "コミット(Git)"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "リモートリポジトリの登録(Git)": {
+    "content": "",
+    "froms": [
+      "Git作業フロー"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "ローカルリポジトリ(Git)": {
+    "content": "",
+    "froms": [
+      "Git作業フロー",
+      "コミット(Git)"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "プッシュ(Git)": {
+    "content": "",
+    "froms": [
+      "Git作業フロー"
+    ],
+    "links": [],
+    "updated": -1,
+    "created": -1
+  },
+  "Git作業フロー": {
+    "content": "# Git作業フロー\n\n[git] で 作業を行うときの流れ\n\n前提：[Git初期設定]を実施済み\n\n1. 既存プロジェクトに参画/新規プロジェクトを開始\n    1. 既存プロジェクトに参画\n        1. [クローン(Git)]を行う\n    1. 新規プロジェクトを開始\n        1. [ローカルリポジトリの初期化(Git)]を行う\n        1. [リモートリポジトリ(Git)]の作成を行う\n        1. [リモートリポジトリの登録(Git)]を行う\n1. ファイルを編集する\n1. 編集内容を[ステージング(Git)]に登録する\n1. [ステージング(Git)]に登録した内容を[コミット(Git)]して、[ローカルリポジトリ(Git)]に変更を記録する。\n1. [ローカルリポジトリ(Git)]に記録した内容を[プッシュ(Git)]して、[リモートリポジトリ(Git)]に変更を記録する。\n",
+    "links": [
+      "git",
+      "Git初期設定",
+      "クローン(Git)",
+      "ローカルリポジトリの初期化(Git)",
+      "リモートリポジトリ(Git)",
+      "リモートリポジトリの登録(Git)",
+      "ステージング(Git)",
+      "コミット(Git)",
+      "ローカルリポジトリ(Git)",
+      "プッシュ(Git)"
+    ],
+    "froms": [],
+    "updated": 1778912132301,
+    "created": 1778912132301
+  },
+  "Git履歴のない新しいブランチを作成する": {
+    "content": "# Git履歴のない新しいブランチを作成する\n\n以下の手順を実施する。\n\n``` bash\n# 履歴のない新しいブランチを作成\ngit checkout --orphan new-main\n\n# すべてのファイルをステージング\ngit add -A\n\n# 新しい初期コミットを作成\ngit commit -m \"Initial commit\"\n\n# 古いmainブランチを削除\ngit branch -D main\n\n# 新しいブランチをmainにリネーム\ngit branch -m main\n\n# リモートに強制プッシュ\ngit push -f origin main\n```",
+    "links": [],
+    "froms": [],
+    "updated": 1778912132388,
+    "created": 1778912132388
+  },
+  "Git追加(add)取り消し": {
+    "content": "# Git追加(add)取り消し\n\n[git] でaddを取り消すときの方法\n\n`git add` された内容は [ステージング(Git)] に登録されているので、そこから登録内容を削除することで取り消すことができる。\n[Gitステージングから削除] と同じ。",
+    "links": [
+      "git",
+      "ステージング(Git)",
+      "Gitステージングから削除"
+    ],
+    "froms": [],
+    "updated": 1778912132432,
+    "created": 1778912132432
+  },
+  "ドライラン": {
+    "content": "# ドライラン\n\n予行演習、空運転のこと、\n語源は諸説あるが「消防士たちの水を撒かない（dry）訓練・予行演習」らしい。",
+    "froms": [
+      "コミット(Git)"
+    ],
+    "links": [],
+    "updated": 1778912132562,
+    "created": 1778912132562
+  },
+  "ハンク(Git)": {
+    "content": "# ハンク(Git)\n\n[git] で 更新差分 のこと。\n[ステージング(Git)] に登録するときに、デバッグログ出力の部分を[コミット(Git)]したくないときに、その部分をはじいて登録することができる。\nその際の 変更差分 の 1ブロック を ハンク(hunk) と呼ぶ。\n",
+    "froms": [
+      "ステージング(Git)"
+    ],
+    "links": [
+      "git",
+      "ステージング(Git)",
+      "コミット(Git)"
+    ],
+    "updated": 1778912132605,
+    "created": 1778912132605
+  }
+}
