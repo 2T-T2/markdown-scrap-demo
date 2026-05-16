@@ -1,0 +1,73 @@
+name: Update MetaData
+on:
+  push:
+    paths:
+      - "pages/*.md"
+
+permissions:
+  contents: write # リポジトリの内容への書き込み権限を許可
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    name: Update Metadata
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: setup-deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: lts
+
+      - name: update metadata
+        run: |
+          file_metadata="data/metadata.json"
+
+          FILE_LIST=""
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            # 初回実行の場合
+            FILE_LIST=$(ls pages/*.md)
+          elif [ ! -e ${file_metadata} ]; then
+            # 初回ワークフローがコケた時のフォールバック
+            FILE_LIST=$(ls pages/*.md)
+          else
+            # 前回のpush地点からの差分を取得
+            FILE_LIST=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+          fi
+
+          # 今回更新分のファイルのメタデータを更新する
+          for file in $FILE_LIST
+          do
+              deno run --allow-read --allow-write scripts/update-metadata.ts ${file} ${file_metadata}
+          done
+
+          # リモートリポジトリにプッシュ
+          git config --local user.email "action@github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add -f ${file_metadata}
+          git commit -m "【GH ACT】UPDATE METADATA"
+          git push
+
+      - name: upload pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    name: Deploy GitHub-Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deployment
+        id: deployment
+        uses: actions/deploy-pages@v4
+      
